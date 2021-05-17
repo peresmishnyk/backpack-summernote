@@ -183,7 +183,7 @@ trait AutomaticServiceProvider
     }
 
     protected function publishedLangsPath() {
-        return resource_path('lang/vendor/'.$this->vendorName());
+        return resource_path('lang/vendor/'.$this->vendorName);
     }
 
     // -------------
