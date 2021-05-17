@@ -20,7 +20,6 @@
                 ],  $field['options'] ?? []);
 
     $field['options'] = array_merge(['dialogsInBody' => true, 'tooltip' => false], $field['options'] ?? []);
-    dump($field);
 @endphp
 
 @include('crud::fields.inc.wrapper_start')
