@@ -3,6 +3,22 @@
     // make sure that the options array is defined
     // and at the very least, dialogsInBody is true;
     // that's needed for modals to show above the overlay in Bootstrap 4
+    $field['options'] = array_merge([
+                    'toolbar' => [
+                        // [groupName, [list of button]]
+                        ['style', ['style']],
+                        ['style', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['audio', 'link', 'picture', 'video']],
+                        ['view', ['fullscreen', 'codeview', 'help']],
+                    ],
+                    'codemirror' => [
+                        'theme' => 'monokai'
+                    ]
+                ],  $field['options'] ?? []);
+
     $field['options'] = array_merge(['dialogsInBody' => true, 'tooltip' => false], $field['options'] ?? []);
 @endphp
 
