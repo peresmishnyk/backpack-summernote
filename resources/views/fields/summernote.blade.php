@@ -15,7 +15,10 @@
                         ['view', ['fullscreen', 'codeview', 'help']],
                     ],
                     'codemirror' => [
-                        'theme' => 'monokai'
+                        'theme' => 'monokai',
+                        'indentWithTabs' => true,
+                        'indentUnit' => 1,
+                        'lineNumbers' => true
                     ]
                 ],  $field['options'] ?? []);
 
@@ -23,19 +26,19 @@
 @endphp
 
 @include('crud::fields.inc.wrapper_start')
-    <label>{!! $field['label'] !!}</label>
-    @include('crud::fields.inc.translatable_icon')
-    <textarea
-        name="{{ $field['name'] }}"
-        data-init-function="bpFieldInitSummernoteElement"
-        data-options="{{ json_encode($field['options']) }}"
+<label>{!! $field['label'] !!}</label>
+@include('crud::fields.inc.translatable_icon')
+<textarea
+    name="{{ $field['name'] }}"
+    data-init-function="bpFieldInitSummernoteElement"
+    data-options="{{ json_encode($field['options']) }}"
         @include('crud::fields.inc.attributes', ['default_class' =>  'form-control summernote'])
         >{{ old(square_brackets_to_dots($field['name'])) ?? $field['value'] ?? $field['default'] ?? '' }}</textarea>
 
-    {{-- HINT --}}
-    @if (isset($field['hint']))
-        <p class="help-block">{!! $field['hint'] !!}</p>
-    @endif
+{{-- HINT --}}
+@if (isset($field['hint']))
+    <p class="help-block">{!! $field['hint'] !!}</p>
+@endif
 @include('crud::fields.inc.wrapper_end')
 
 
@@ -50,7 +53,7 @@
     {{-- FIELD CSS - will be loaded in the after_styles section --}}
     @push('crud_fields_styles')
         <!-- include summernote css-->
-        <link href="{{ asset('packages/summernote/dist/summernote-bs4.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('packages/summernote/dist/summernote-bs4.css') }}" rel="stylesheet" type="text/css"/>
         <style type="text/css">
             .note-editor.note-frame .note-status-output, .note-editor.note-airframe .note-status-output {
                 height: auto;
@@ -62,9 +65,11 @@
     @push('crud_fields_scripts')
         <!-- include codemirror (codemirror.css, codemirror.js, xml.js, formatting.js) -->
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.css">
-        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.css">
+        <link rel="stylesheet" type="text/css"
+              href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.css">
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.js"></script>
+        <script type="text/javascript"
+                src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.js"></script>
         <!-- include summernote js-->
         {{-- <script src="{{ asset('packages/summernote/dist/summernote.min.js') }}"></script> --}}

@@ -10,9 +10,26 @@ use Intervention\Image\ImageManagerStatic as Image;
 class HTMLCleaner
 {
     public $buffer;
+    public $character_data = "";
     public $parsed_rules;
     public $level;
     public $config;
+    public $self_closing_tags = [
+        'area',
+        'base',
+        'br',
+        'col',
+        'embed',
+        'hr',
+        'img',
+        'input',
+        'link',
+        'meta',
+        'param',
+        'source',
+        'track',
+        'wbr',
+    ];
 
     const DEFAULT_RULES = 'video,source,strong,b,u,i,br,p[class],span[class|style],a[href|target],h1,h2,h3,h4,h5,h6,img[src|style|width|height|data-filename],hr,code,blockquote,ul,ol,li,iframe,font[color],table,tr,td,th,thead,colgroup,col,tfoot,tbody,strike,sup,sub';
 
@@ -21,7 +38,6 @@ class HTMLCleaner
     }
 
     public function clear($content, $rules=null)
-
     {
         $this->level = 0;
         $this->buffer = '';
@@ -65,7 +81,7 @@ class HTMLCleaner
 
         xml_parse($parser, '<xml>' . $content . '</xml>');
 
-        return Str::after(Str::beforeLast($this->buffer, '</xml>'), '<xml>');
+        return trim(Str::after(Str::beforeLast($this->buffer, '</xml>'), '<xml>'));
 
     }
 
@@ -75,7 +91,7 @@ class HTMLCleaner
         $name = mb_strtolower($name);
         if (isset($this->parsed_rules[$name])) {
             $this->level++;
-            $this->buffer .= str_repeat("\t", $this->level - 1) . '<' . mb_strtolower($name);
+            $this->buffer .= "\n" . str_repeat("\t", $this->level - 1) . '<' . mb_strtolower($name);
 
             // Save images if a base64 was sent, store it in the db
             if ($name == 'img') {
@@ -112,28 +128,29 @@ class HTMLCleaner
                     $this->buffer .= ' ' . mb_strtolower($k) . '="' . $v . '"';
                 }
             }
-            $this->buffer .= '>' . "\n";
+            $this->buffer .= in_array($name, $this->self_closing_tags) ? ' />' : '>';
         }
     }
 
     // Called to this function when tags are closed
     public function endElements($parser, $name)
     {
+        $this->character_data = trim(preg_replace("/\s+/", ' ', $this->character_data));
         $name = mb_strtolower($name);
         if (isset($this->parsed_rules[$name])) {
             if (!in_array($name, ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'])) {
-                $this->buffer .= "\n" . str_repeat("\t", $this->level - 1) . '</' . mb_strtolower($name) . '>';
+                $this->buffer .= ($this->character_data ? $this->character_data : "\n" . str_repeat("\t", $this->level - 1)) . '</' . mb_strtolower($name) . '>';
             }
             $this->level--;
         }
+        $this->character_data = "";
     }
 
     // Called on the text between the start and end of the tags
     public function characterData($parser, $data)
     {
-        if (!empty($data)) {
-            $this->buffer .= str_repeat("\t", $this->level) . $data;
-        }
+        $this->character_data .= $data;
+        //$this->buffer .= trim(preg_replace("/\s+/", ' ', $data));
     }
 }
 
