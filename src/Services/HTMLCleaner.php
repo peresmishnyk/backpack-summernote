@@ -142,6 +142,8 @@ class HTMLCleaner
                 $this->buffer .= ($this->character_data ? $this->character_data : "\n" . str_repeat("\t", $this->level - 1)) . '</' . mb_strtolower($name) . '>';
             }
             $this->level--;
+        } else {
+            $this->buffer .= $this->character_data;
         }
         $this->character_data = "";
     }
