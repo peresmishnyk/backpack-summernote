@@ -88,6 +88,11 @@ class HTMLCleaner
     // Called to this function when tags are opened
     public function startElements($parser, $name, $attrs)
     {
+        $this->character_data = trim(preg_replace("/\s+/", ' ', $this->character_data));
+        if ($this->character_data){
+            $this->buffer .= $this->character_data;
+            $this->character_data = "";
+        }
         $name = mb_strtolower($name);
         if (isset($this->parsed_rules[$name])) {
             $this->level++;
