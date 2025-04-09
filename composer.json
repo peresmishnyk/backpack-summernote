@@ -25,7 +25,7 @@
         "psr-4": {
             "Peresmishnyk\\BackpackSummernote\\": "src/"
         }
-    },
+    ],
     "autoload-dev": {
         "psr-4": {
             "Peresmishnyk\\BackpackSummernote\\Tests\\": "tests"
@@ -40,5 +40,6 @@
                 "Peresmishnyk\\BackpackSummernote\\AddonServiceProvider"
             ]
         }
-    }
+    },
+    "version": "2.0.0" // Add this line if it does not exist
 }
