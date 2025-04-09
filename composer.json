@@ -25,7 +25,7 @@
         "psr-4": {
             "Peresmishnyk\\BackpackSummernote\\": "src/"
         }
-    ],
+    },
     "autoload-dev": {
         "psr-4": {
             "Peresmishnyk\\BackpackSummernote\\Tests\\": "tests"
